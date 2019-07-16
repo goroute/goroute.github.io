@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go Route on Hugo Whisper Theme</title>
+    <link>/</link>
+    <description>Recent content in Go Route on Hugo Whisper Theme</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 28 Nov 2018 15:14:39 +1000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Install</title>
+      <link>/guide/install/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/install/</guid>
+      <description>Go route uses go modules which allows easy installation via standart go get command. This simple guide show how to add go route to your project.
+Adding or updating goroute Run go get inside your project root directory.
+go get -u github.com/goroute/route Updating to specific version Modify go.mod file with specific version.
+module mymodule require ( github.com/goroute/route v0.0.1 ) Build project to automatically updates go.sum file
+go build . Problems If you have any problem adding goroute to your project please read go modules wiki.</description>
+    </item>
+    
+    <item>
+      <title>Quick Start</title>
+      <link>/guide/quick-start/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/quick-start/</guid>
+      <description>Create new project.
+mkdir hello cd ./hello go mod init hello Create main.go file with content.
+package main import ( &amp;#34;github.com/goroute/route&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; ) func main() { mux := route.NewServeMux() mux.GET(&amp;#34;/&amp;#34;, func(c route.Context) error { return c.String(http.StatusOK, &amp;#34;Hello!&amp;#34;) }) log.Fatal(http.ListenAndServe(&amp;#34;:9000&amp;#34;, mux)) } Run HTTP server.
+go run . Open browser and go to http://localhost:9000</description>
+    </item>
+    
+  </channel>
+</rss>
