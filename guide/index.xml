@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Overview on Hugo Whisper Theme</title>
+    <title>Overview on Goroute</title>
     <link>/guide/</link>
-    <description>Recent content in Overview on Hugo Whisper Theme</description>
+    <description>Recent content in Overview on Goroute</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 28 Nov 2018 15:14:39 +1000</lastBuildDate>
@@ -34,6 +34,16 @@ go build . Problems If you have any problem adding goroute to your project pleas
 mkdir hello cd ./hello go mod init hello Create main.go file with content.
 package main import ( &amp;#34;github.com/goroute/route&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; ) func main() { mux := route.NewServeMux() mux.GET(&amp;#34;/&amp;#34;, func(c route.Context) error { return c.String(http.StatusOK, &amp;#34;Hello!&amp;#34;) }) log.Fatal(http.ListenAndServe(&amp;#34;:9000&amp;#34;, mux)) } Run HTTP server.
 go run . Open browser and go to http://localhost:9000</description>
+    </item>
+    
+    <item>
+      <title>Middleware</title>
+      <link>/guide/middleware/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/middleware/</guid>
+      <description>Goroute supports common middleware pattern. In this guide we will use standart goroute middlewares and create new one.
+Using middleware package main import ( &amp;#34;github.com/goroute/route&amp;#34; &amp;#34;github.com/goroute/recover&amp;#34; &amp;#34;github.com/goroute/compress&amp;#34; &amp;#34;github.com/goroute/cors&amp;#34; &amp;#34;github.com/goroute/static&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; ) func main() { mux := route.NewServeMux() mux.Use( recover.New(), compress.New(), cors.New(), static.New( static.HTML5(true), static.Root(&amp;#34;./dist&amp;#34;), ), ) mux.GET(&amp;#34;/&amp;#34;, func(c route.Context) error { return c.String(http.StatusOK, &amp;#34;Hello!&amp;#34;) }) log.Fatal(http.ListenAndServe(&amp;#34;:9000&amp;#34;, mux)) } Creating new middleware To add our own middleware we just need to create a new func which returns route.</description>
     </item>
     
   </channel>

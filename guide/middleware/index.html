@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Middleware - Goroute</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="icon" href="/favicon.png">
+
+  
+  
+  <link rel="stylesheet" href="/css/style.min.2218af5e684ba1f78bd038b2ca7c18e8f3365e78af58e4c7ff1a03ead808e8a7.css">
+  
+
+  
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+
+<body class='page page-default-single'>
+  <div id="main-menu-mobile" class="main-menu-mobile">
+  <ul>
+    
+    
+    <li class="menu-item-home">
+      <a href="/">
+        <span>Home</span>
+      </a>
+    </li>
+    
+    <li class="menu-item-guide">
+      <a href="/guide/">
+        <span>Guide</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+  <div class="wrapper">
+    <div class='header'>
+  <div class="container">
+    <div class="logo">
+      <a href="/"><img alt="Logo" src="/images/logo.svg" /></a>
+    </div>
+    <div class="logo-mobile">
+      <a href="/"><img alt="Logo" src="/images/logo-mobile.svg" /></a>
+    </div>
+    <div id="main-menu" class="main-menu">
+  <ul>
+    
+    
+    <li class="menu-item-home">
+      <a href="/">
+        <span>Home</span>
+      </a>
+    </li>
+    
+    <li class="menu-item-guide">
+      <a href="/guide/">
+        <span>Guide</span>
+      </a>
+    </li>
+    
+  </ul>
+</div>
+    <button id="toggle-main-menu-mobile" class="hamburger hamburger--slider" type="button">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+</button>
+  </div>
+</div>
+
+
+    
+    
+    
+    
+    
+    
+
+    
+    <div class="container pt-2 pt-md-6 pb-3 pb-md-6">
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <div class="sidebar">
+            
+<div class="docs-menu">
+  <h4>Guide</h4>
+  <ul>
+    
+    <li class="">
+      <a href="/guide/install/">Install</a>
+    </li>
+    
+    <li class="">
+      <a href="/guide/quick-start/">Quick Start</a>
+    </li>
+    
+    <li class="active ">
+      <a href="/guide/middleware/">Middleware</a>
+    </li>
+    
+  </ul>
+</div>
+
+          </div>
+        </div>
+        <div class="col-12 col-md-9">
+          
+<h1 class="title">Middleware</h1>
+<div class="content">
+  
+
+<p>Goroute supports common middleware pattern. In this guide we will use standart goroute middlewares and create new one.</p>
+
+<h3 id="using-middleware">Using middleware</h3>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/goroute/route&#34;</span>
+	<span class="s">&#34;github.com/goroute/recover&#34;</span>
+	<span class="s">&#34;github.com/goroute/compress&#34;</span>
+	<span class="s">&#34;github.com/goroute/cors&#34;</span>
+	<span class="s">&#34;github.com/goroute/static&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">mux</span> <span class="o">:=</span> <span class="nx">route</span><span class="p">.</span><span class="nf">NewServeMux</span><span class="p">()</span>
+
+	<span class="nx">mux</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span>
+		<span class="nx">recover</span><span class="p">.</span><span class="nf">New</span><span class="p">(),</span>
+		<span class="nx">compress</span><span class="p">.</span><span class="nf">New</span><span class="p">(),</span>
+		<span class="nx">cors</span><span class="p">.</span><span class="nf">New</span><span class="p">(),</span>
+		<span class="nx">static</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span>
+			<span class="nx">static</span><span class="p">.</span><span class="nf">HTML5</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span>
+			<span class="nx">static</span><span class="p">.</span><span class="nf">Root</span><span class="p">(</span><span class="s">&#34;./dist&#34;</span><span class="p">),</span>
+		<span class="p">),</span>
+	<span class="p">)</span>
+
+	<span class="nx">mux</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="s">&#34;Hello!&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:9000&#34;</span><span class="p">,</span> <span class="nx">mux</span><span class="p">))</span>
+<span class="p">}</span></code></pre></div>
+<h3 id="creating-new-middleware">Creating new middleware</h3>
+
+<p>To add our own middleware we just need to create a new func which returns <code>route.MiddlewareFunc</code>.</p>
+
+<p>Let&rsquo;s create a new middleware which logs each request path.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/goroute/route&#34;</span>
+
+<span class="kd">func</span> <span class="nf">logger</span><span class="p">()</span> <span class="nx">route</span><span class="p">.</span><span class="nx">MiddlewareFunc</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+			<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>Register middleware.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">mux</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nf">logger</span><span class="p">())</span></code></pre></div>
+<h4 id="adding-options">Adding options</h4>
+
+<p>Common scenario for middleware is to have some configurable options. Let&rsquo;s use go option pattern to allow passing options.</p>
+
+<p>Let&rsquo;s move our middleware to a new package called logger.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">logger</span>
+
+<span class="kn">import</span> <span class="s">&#34;github.com/goroute/route&#34;</span>
+
+<span class="kd">type</span> <span class="nx">Options</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Skipper</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Skipper</span>
+	<span class="nx">Level</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Options</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">GetDefaultOptions</span><span class="p">()</span> <span class="nx">Options</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">Options</span><span class="p">{</span>
+		<span class="nx">Skipper</span><span class="p">:</span> <span class="nx">route</span><span class="p">.</span><span class="nx">DefaultSkipper</span><span class="p">,</span>
+		<span class="nx">Level</span><span class="p">:</span>   <span class="s">&#34;info&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">Skipper</span><span class="p">(</span><span class="nx">skipper</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Skipper</span><span class="p">)</span> <span class="nx">Option</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">o</span> <span class="o">*</span><span class="nx">Options</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">o</span><span class="p">.</span><span class="nx">Skipper</span> <span class="p">=</span> <span class="nx">skipper</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">Level</span><span class="p">(</span><span class="nx">level</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">Option</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">o</span> <span class="o">*</span><span class="nx">Options</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">o</span><span class="p">.</span><span class="nx">Level</span> <span class="p">=</span> <span class="nx">level</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">New</span><span class="p">(</span><span class="nx">options</span> <span class="o">...</span><span class="nx">Option</span><span class="p">)</span> <span class="nx">route</span><span class="p">.</span><span class="nx">MiddlewareFunc</span> <span class="p">{</span>
+	<span class="c1">// Apply options.
+</span><span class="c1"></span>	<span class="nx">opts</span> <span class="o">:=</span> <span class="nf">GetDefaultOptions</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">options</span> <span class="p">{</span>
+		<span class="nf">opt</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">opts</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nf">Skipper</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">Level</span> <span class="o">==</span> <span class="s">&#34;debug&#34;</span> <span class="p">{</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>Now we can import our middleware and register with options.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;mymodule/logger&#34;</span>
+
+<span class="c1">// ...
+</span><span class="c1"></span>
+<span class="nx">mux</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nx">logger</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">logger</span><span class="p">.</span><span class="nf">Level</span><span class="p">(</span><span class="s">&#34;debug&#34;</span><span class="p">)))</span></code></pre></div>
+</div>
+</div>
+
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="sub-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="sub-footer-inner">
+          <ul>
+            <li class="zerostatic">
+              <a class="github-button"
+                       href="https://github.com/goroute/route"
+                       data-icon="mark-github"
+                       data-size="large"
+                       data-show-count="true"
+                       aria-label="Visit Goroute on GitHub">Github</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/scripts.min.bf1e1f7ae8e03db5f012356e825843facdff51c0a559cb0d27fe2bbe1db405c2.js"></script>
+  
+
+  
+  
+  
+    
+  
+
+
+</body>
+
+</html>
