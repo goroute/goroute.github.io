@@ -46,5 +46,50 @@ go run . Open browser and go to http://localhost:9000</description>
 Using middleware package main import ( &amp;#34;github.com/goroute/route&amp;#34; &amp;#34;github.com/goroute/recover&amp;#34; &amp;#34;github.com/goroute/compress&amp;#34; &amp;#34;github.com/goroute/cors&amp;#34; &amp;#34;github.com/goroute/static&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; ) func main() { mux := route.NewServeMux() mux.Use( recover.New(), compress.New(), cors.New(), static.New( static.HTML5(true), static.Root(&amp;#34;./dist&amp;#34;), ), ) mux.GET(&amp;#34;/&amp;#34;, func(c route.Context) error { return c.String(http.StatusOK, &amp;#34;Hello!&amp;#34;) }) log.Fatal(http.ListenAndServe(&amp;#34;:9000&amp;#34;, mux)) } Creating new middleware To add our own middleware we just need to create a new func which returns route.</description>
     </item>
     
+    <item>
+      <title>Auto TLS</title>
+      <link>/guide/https/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/https/</guid>
+      <description>TODO</description>
+    </item>
+    
+    <item>
+      <title>Error Handling</title>
+      <link>/guide/error-handling/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/error-handling/</guid>
+      <description>TODO</description>
+    </item>
+    
+    <item>
+      <title>Logging</title>
+      <link>/guide/logging/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/logging/</guid>
+      <description>TODO</description>
+    </item>
+    
+    <item>
+      <title>REST API</title>
+      <link>/guide/rest-api/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/rest-api/</guid>
+      <description>TODO</description>
+    </item>
+    
+    <item>
+      <title>RPC API</title>
+      <link>/guide/rpc-api/</link>
+      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
+      
+      <guid>/guide/rpc-api/</guid>
+      <description>TODO</description>
+    </item>
+    
   </channel>
 </rss>
