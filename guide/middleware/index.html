@@ -172,15 +172,13 @@
 
 <p>To add our own middleware we just need to create a new func which returns <code>route.MiddlewareFunc</code>.</p>
 
-<p>Let&rsquo;s create a new middleware which logs each request path.</p>
+<p>Let&rsquo;s create a new middleware which logs each request&rsquo;s path.</p>
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/goroute/route&#34;</span>
 
 <span class="kd">func</span> <span class="nf">logger</span><span class="p">()</span> <span class="nx">route</span><span class="p">.</span><span class="nx">MiddlewareFunc</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
-			<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
-		<span class="p">}</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+		<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <p>Register middleware.</p>
@@ -227,16 +225,14 @@
 		<span class="nf">opt</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">opts</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-			<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nf">Skipper</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
-				<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
-			<span class="p">}</span>
-			<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">Level</span> <span class="o">==</span> <span class="s">&#34;debug&#34;</span> <span class="p">{</span>
-				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
-			<span class="p">}</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">next</span> <span class="nx">route</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nf">Skipper</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
 			<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
 		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">Level</span> <span class="o">==</span> <span class="s">&#34;debug&#34;</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Request Path:&#34;</span><span class="p">,</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Request</span><span class="p">().</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nf">next</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <p>Now we can import our middleware and register with options.</p>
