@@ -132,7 +132,26 @@
           
 <h1 class="title">Error Handling</h1>
 <div class="content">
-  <p>TODO</p>
+  
+
+<p>Goroute provides out of the box global error handling. This is possible due to route handler func signature.</p>
+
+<p>Each route handler requires this signature:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">HandlerFunc</span> <span class="kd">func</span><span class="p">(</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span></code></pre></div>
+<p>Which allows to directly return error:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">mux</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/:id&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="nx">id</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">id</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;id is empty&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">32</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;id is invalid&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">NoContent</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOk</span><span class="p">)</span>
+<span class="p">})</span></code></pre></div>
+<h1 id="todo">TODO</h1>
+
+<p>&hellip;</p>
 
 </div>
 </div>
