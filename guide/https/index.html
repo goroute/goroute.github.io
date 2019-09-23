@@ -119,10 +119,6 @@
       <a href="/guide/rest-api/">REST API</a>
     </li>
     
-    <li class="">
-      <a href="/guide/rpc-api/">RPC API</a>
-    </li>
-    
   </ul>
 </div>
 
@@ -132,8 +128,48 @@
           
 <h1 class="title">Auto TLS</h1>
 <div class="content">
-  <p>TODO</p>
+  <p>Go has a great support for HTTPS and Let&rsquo;s Encrypt certificates. We are going to use <a href="https://godoc.org/golang.org/x/crypto/acme/autocert">autocert</a> package
+from official golang crypto repository.</p>
 
+<p>Full example could be found <a href="https://github.com/goroute/examples/tree/master/cmd/https">here</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+
+	<span class="s">&#34;github.com/goroute/route&#34;</span>
+	<span class="s">&#34;golang.org/x/crypto/acme/autocert&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">mux</span> <span class="o">:=</span> <span class="nx">route</span><span class="p">.</span><span class="nf">NewServeMux</span><span class="p">()</span>
+
+	<span class="nx">mux</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">route</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span> <span class="s">&#34;Hello TLS!&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nf">serveTLS</span><span class="p">(</span><span class="nx">mux</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">serveTLS</span><span class="p">(</span><span class="nx">mux</span> <span class="o">*</span><span class="nx">route</span><span class="p">.</span><span class="nx">Mux</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">hostName</span> <span class="o">:=</span> <span class="s">&#34;example.com&#34;</span>
+	<span class="nx">m</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">autocert</span><span class="p">.</span><span class="nx">Manager</span><span class="p">{</span>
+		<span class="nx">Prompt</span><span class="p">:</span>     <span class="nx">autocert</span><span class="p">.</span><span class="nx">AcceptTOS</span><span class="p">,</span>
+		<span class="nx">Cache</span><span class="p">:</span>      <span class="nx">autocert</span><span class="p">.</span><span class="nf">DirCache</span><span class="p">(</span><span class="s">&#34;certs&#34;</span><span class="p">),</span>
+		<span class="nx">HostPolicy</span><span class="p">:</span> <span class="nx">autocert</span><span class="p">.</span><span class="nf">HostWhitelist</span><span class="p">(</span><span class="nx">hostName</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;www.%s&#34;</span><span class="p">,</span> <span class="nx">hostName</span><span class="p">)),</span>
+	<span class="p">}</span>
+	<span class="nx">srv</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">{</span>
+		<span class="nx">Handler</span><span class="p">:</span>           <span class="nx">mux</span><span class="p">,</span>
+		<span class="nx">ReadTimeout</span><span class="p">:</span>       <span class="mi">30</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+		<span class="nx">ReadHeaderTimeout</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+		<span class="nx">WriteTimeout</span><span class="p">:</span>      <span class="mi">30</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+		<span class="nx">TLSConfig</span><span class="p">:</span>         <span class="nx">m</span><span class="p">.</span><span class="nf">TLSConfig</span><span class="p">(),</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">ListenAndServeTLS</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
 </div>
 </div>
 

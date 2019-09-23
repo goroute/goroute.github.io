@@ -52,7 +52,9 @@ Using middleware package main import ( &amp;#34;github.com/goroute/route&amp;#34
       <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
       
       <guid>/guide/https/</guid>
-      <description>TODO</description>
+      <description>Go has a great support for HTTPS and Let&amp;rsquo;s Encrypt certificates. We are going to use autocert package from official golang crypto repository.
+Full example could be found here.
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;time&amp;#34; &amp;#34;github.com/goroute/route&amp;#34; &amp;#34;golang.org/x/crypto/acme/autocert&amp;#34; ) func main() { mux := route.NewServeMux() mux.GET(&amp;#34;/&amp;#34;, func(c route.Context) error { return c.String(http.StatusOK, &amp;#34;Hello TLS!&amp;#34;) }) log.Fatal(serveTLS(mux)) } func serveTLS(mux *route.Mux) error { hostName := &amp;#34;example.com&amp;#34; m := &amp;amp;autocert.Manager{ Prompt: autocert.</description>
     </item>
     
     <item>
@@ -63,8 +65,8 @@ Using middleware package main import ( &amp;#34;github.com/goroute/route&amp;#34
       <guid>/guide/error-handling/</guid>
       <description>Goroute provides out of the box global error handling. This is possible due to route handler func signature.
 Each route handler requires this signature:
-HandlerFunc func(Context) error Which allows to directly return error:
-mux.GET(&amp;#34;/user/:id&amp;#34;, func(c Context) error { id := c.Param(&amp;#34;id&amp;#34;) if id == &amp;#34;&amp;#34; { return errors.New(&amp;#34;id is empty&amp;#34;) } if len(id) != 32 { return errors.New(&amp;#34;id is invalid&amp;#34;) } return c.NoContent(http.StatusOk) }) TODO &amp;hellip;</description>
+HandlerFunc func(Context) error Which allows to directly return error from handler:
+mux.GET(&amp;#34;/user/:id&amp;#34;, func(c Context) error { id := c.Param(&amp;#34;id&amp;#34;) if id == &amp;#34;&amp;#34; { return errors.New(&amp;#34;id is empty&amp;#34;) } if len(id) != 32 { return errors.New(&amp;#34;id is invalid&amp;#34;) } return c.NoContent(http.StatusOk) })</description>
     </item>
     
     <item>
@@ -82,17 +84,9 @@ mux.GET(&amp;#34;/user/:id&amp;#34;, func(c Context) error { id := c.Param(&amp;
       <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
       
       <guid>/guide/rest-api/</guid>
-      <description>Full example could be found here.
-package main import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;github.com/goroute/route&amp;#34; ) type Customer struct { ID string `json:&amp;#34;id&amp;#34;` Name string `json:&amp;#34;name&amp;#34;` } func main() { mux := route.NewServeMux() v1 := mux.Group(&amp;#34;/v1&amp;#34;) v1.GET(&amp;#34;/customers/:id&amp;#34;, func(c route.Context) error { customerID := c.Param(&amp;#34;id&amp;#34;) return c.String(http.StatusOK, fmt.Sprintf(&amp;#34;GET customer %s\n&amp;#34;, customerID)) }) v1.POST(&amp;#34;/customers&amp;#34;, func(c route.Context) error { customer := &amp;amp;Customer{} if err := c.Bind(customer); err != nil { return err } return c.</description>
-    </item>
-    
-    <item>
-      <title>RPC API</title>
-      <link>/guide/rpc-api/</link>
-      <pubDate>Mon, 11 Feb 2019 19:27:37 +1000</pubDate>
-      
-      <guid>/guide/rpc-api/</guid>
-      <description>TODO</description>
+      <description>Goroute has a good support for building restful apis.
+Full example could be found here.
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;github.com/goroute/route&amp;#34; ) type Customer struct { ID string `json:&amp;#34;id&amp;#34;` Name string `json:&amp;#34;name&amp;#34;` } func main() { mux := route.NewServeMux() v1 := mux.Group(&amp;#34;/v1&amp;#34;) v1.GET(&amp;#34;/customers/:id&amp;#34;, func(c route.Context) error { customerID := c.Param(&amp;#34;id&amp;#34;) return c.String(http.StatusOK, fmt.Sprintf(&amp;#34;GET customer %s\n&amp;#34;, customerID)) }) v1.POST(&amp;#34;/customers&amp;#34;, func(c route.Context) error { customer := &amp;amp;Customer{} if err := c.</description>
     </item>
     
   </channel>
